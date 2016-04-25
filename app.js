@@ -1,54 +1,62 @@
-window.onload = function(){
+window.onload = function() {
 
-  var submitButton = document.querySelector('form div:last-child input');
-  var inputColors = document.querySelectorAll('input');
-  var body = document.querySelector('body');
+    var submitButton = document.querySelector('form div:last-child input');
+    var inputColors = document.querySelectorAll('input');
+    var body = document.querySelector('body');
 
-  var currentdate = new Date(Date.now())
-  var today = currentdate.getDay()
+    var currentdate = new Date(Date.now());
+    var today = currentdate.getDay();
 
-  document.querySelector('#today').innerText = currentdate;
+    document.querySelector('#today').innerText = currentdate;
 
-  var dayColors = {};
+    var dayColors = {};
 
 
 
-  getDayColorsFromLocalStorage()
+    getDayColorsFromLocalStorage()
 
-  submitButton.addEventListener("click", function(event){
-    event.preventDefault();
+    submitButton.addEventListener("click", function(event) {
+        event.preventDefault();
 
-    updateDayColors();
+        updateDayColors();
 
-    setColors();
+        setColors();
 
-    addToLocalStorage();
-  })
+        addToLocalStorage();
+    })
 
-  function setColors(){
-    var todaysColor = dayColors[today];
-    body.style.backgroundColor = todaysColor;
-  }
-
-  function getDayColorsFromLocalStorage(){
-    if (window.localStorage.colorData) {
-      var colorData = JSON.parse(window.localStorage.colorData);
-      var todaysColor = colorData[today];
-      body.style.backgroundColor = todaysColor;
+    function setColors() {
+        var todaysColor = dayColors[today];
+        body.style.backgroundColor = todaysColor;
     }
-  }
 
-  function updateDayColors(){
-    for (var i = 0; i < inputColors.length -1; i++) {
-      var colorValue = inputColors[i].value;
-      var day = inputColors[i].id
-      dayColors[day] = colorValue;
+    function getDayColorsFromLocalStorage() {
+        if (window.localStorage.colorData) {
+            var colorData = JSON.parse(window.localStorage.colorData);
+            var todaysColor = colorData[today];
+            body.style.backgroundColor = todaysColor;
+            setColorPreferences(colorData);
+        }
     }
-  }
 
-  function addToLocalStorage(){
-    data = JSON.stringify(dayColors);
-    window.localStorage.colorData = data
-  }
+    function setColorPreferences(data) {
+        for (var i = 1; i < inputColors.length; i++) {
 
-}
+            inputColors[i-1].value = data[i.toString()];
+        }
+    }
+
+    function updateDayColors() {
+        for (var i = 0; i < inputColors.length - 1; i++) {
+            var colorValue = inputColors[i].value;
+            var day = inputColors[i].id;
+            dayColors[day] = colorValue;
+        }
+    }
+
+    function addToLocalStorage() {
+        data = JSON.stringify(dayColors);
+        window.localStorage.colorData = data;
+    }
+
+};
